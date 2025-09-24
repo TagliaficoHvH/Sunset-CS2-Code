@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{ca39859f-e353-4640-9084-d36f0a212acd}</ProjectGuid>
+    <RootNamespace>externalcs2esp</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Sunset CS2</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\joebs\Desktop\external cs2 esp\external\ImGui;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Users\joebs\Desktop\external cs2 esp\external\ImGui;$(IncludePath)</IncludePath>
+    <OutDir>..\Build</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;opencv_world4120.lib;Shell32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>d3d11.lib;C:\vcpkg\installed\x64-windows\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;opencv_world4120.lib;Shell32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>d3d11.lib;C:\vcpkg\installed\x64-windows\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="external\ImGui\imgui.cpp" />
+    <ClCompile Include="external\ImGui\imguiCustomWidgets.cpp" />
+    <ClCompile Include="external\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="external\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="external\ImGui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="external\ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="external\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="external\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="external\lua-5.4.7\src\lapi.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lauxlib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lbaselib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lcode.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lcorolib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lctype.c" />
+    <ClCompile Include="external\lua-5.4.7\src\ldblib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\ldebug.c" />
+    <ClCompile Include="external\lua-5.4.7\src\ldo.c" />
+    <ClCompile Include="external\lua-5.4.7\src\ldump.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lfunc.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lgc.c" />
+    <ClCompile Include="external\lua-5.4.7\src\linit.c" />
+    <ClCompile Include="external\lua-5.4.7\src\liolib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\llex.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lmathlib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lmem.c" />
+    <ClCompile Include="external\lua-5.4.7\src\loadlib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lobject.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lopcodes.c" />
+    <ClCompile Include="external\lua-5.4.7\src\loslib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lparser.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lstate.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lstring.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lstrlib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\ltable.c" />
+    <ClCompile Include="external\lua-5.4.7\src\ltablib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\ltm.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lua.c" />
+    <ClCompile Include="external\lua-5.4.7\src\luac.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lundump.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lutf8lib.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lvm.c" />
+    <ClCompile Include="external\lua-5.4.7\src\lzio.c" />
+    <ClCompile Include="src\cs\color.cpp" />
+    <ClCompile Include="src\cs\entity.cpp" />
+    <ClCompile Include="src\legit\aimbot\TriggerBot\TriggerBot.cpp" />
+    <ClCompile Include="src\legit\misc\AutoAccept\AutoAccept.cpp" />
+    <ClCompile Include="src\legit\misc\FakeAngles\FakeAngles.cpp" />
+    <ClCompile Include="src\legit\misc\JumpThrow\JumpThrow.cpp" />
+    <ClCompile Include="src\legit\misc\NoFlash\NoFlash.cpp" />
+    <ClCompile Include="src\legit\misc\Watermark\Watermark.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\cs\memory.cpp" />
+    <ClCompile Include="src\cs\vector.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="external\ImGui\imconfig.h" />
+    <ClInclude Include="external\ImGui\imgui.h" />
+    <ClInclude Include="external\ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="external\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="external\ImGui\imgui_internal.h" />
+    <ClInclude Include="external\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="external\ImGui\imstb_textedit.h" />
+    <ClInclude Include="external\ImGui\imstb_truetype.h" />
+    <ClInclude Include="external\lua-5.4.7\menu_item.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lapi.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lauxlib.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lcode.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lctype.h" />
+    <ClInclude Include="external\lua-5.4.7\src\ldebug.h" />
+    <ClInclude Include="external\lua-5.4.7\src\ldo.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lfunc.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lgc.h" />
+    <ClInclude Include="external\lua-5.4.7\src\ljumptab.h" />
+    <ClInclude Include="external\lua-5.4.7\src\llex.h" />
+    <ClInclude Include="external\lua-5.4.7\src\llimits.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lmem.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lobject.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lopcodes.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lopnames.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lparser.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lprefix.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lstate.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lstring.h" />
+    <ClInclude Include="external\lua-5.4.7\src\ltable.h" />
+    <ClInclude Include="external\lua-5.4.7\src\ltm.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lua.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lua.hpp" />
+    <ClInclude Include="external\lua-5.4.7\src\luaconf.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lualib.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lundump.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lvm.h" />
+    <ClInclude Include="external\lua-5.4.7\src\lzio.h" />
+    <ClInclude Include="external\nlohmann\json.hpp" />
+    <ClInclude Include="external\opencv\sources\include\opencv2\opencv.hpp" />
+    <ClInclude Include="src\cheats\misc\BunnyHop\Bunny.h" />
+    <ClInclude Include="src\cheats\misc\MediaPlayer\MediaPlayer.h" />
+    <ClInclude Include="src\cs\bone.hpp" />
+    <ClInclude Include="src\cs\color.hpp" />
+    <ClInclude Include="src\cs\entity.hpp" />
+    <ClInclude Include="src\cs\handle_hijack.h" />
+    <ClInclude Include="src\cs\memory.h" />
+    <ClInclude Include="src\cs\offsets.h" />
+    <ClInclude Include="src\legit\aimbot\TriggerBot\TriggerBot.h" />
+    <ClInclude Include="src\legit\misc\AutoAccept\AutoAccept.h" />
+    <ClInclude Include="src\legit\misc\FakeAngles\FakeAngles.h" />
+    <ClInclude Include="src\legit\misc\JumpThrow\JumpThrow.h" />
+    <ClInclude Include="src\legit\misc\NoFlash\NoFlash.h" />
+    <ClInclude Include="src\legit\misc\Watermark\Watermark.h" />
+    <ClInclude Include="src\render.h" />
+    <ClInclude Include="src\cs\vector.h" />
+    <ClInclude Include="src\cs\vector.hpp" />
+    <ClInclude Include="src\cs\view_matrix.hpp" />
+    <ClInclude Include="src\cs\weapon_index.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="external\lua-5.4.7\doc\contents.html" />
+    <None Include="external\lua-5.4.7\doc\manual.html" />
+    <None Include="external\lua-5.4.7\doc\readme.html" />
+    <CopyFileToFolders Include="src\legit\misc\AutoAccept\opencv_world4120.dll">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <None Include="src\cs\offsets.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="src\legit\misc\AutoAccept\ACCEPT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="external\opencv\sources\include\CMakeLists.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,28 @@
+# Archivos de Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+x64/
+[Oo]bj/
+[Bb]in/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+*.pdb
+*.exe
+*.dll
+*.lib
+
+# Archivos de CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Otros temporales
+*.log
+*.tlog
