@@ -56,22 +56,23 @@ bool info = false;
 
 const char* GetWeaponName(uint64_t csPlayerPawn, Memory& mem);
 
-// Rainbow ESP
-bool rainbowNameEsp = false;
-bool rainbowWeaponEsp = false;
-bool rainbowSkeleton = false;
-bool rainbowBox = false;
-bool rainbowHealth = false;
-bool rainbowHealTextEsp = false;
+// ESP Color Modes
+enum ColorMode { Static, Rainbow, Pulse };
+int colorModeNameEsp = Static;
+int colorModeWeaponEsp = Static;
+int colorModeSkeleton = Static;
+int colorModeBox = Static;
+int colorModeHealth = Static;
+int colorModeHealTextEsp = Static;
 
-// Rainbow ESP Speed   
-float rainbowSpeed = 0.5f;
-float rainbowSpeedNameEsp = 0.5f;
-float rainbowSpeedWeaponEsp = 0.5f;
-float rainbowSpeedSkeleton = 0.5f;
-float rainbowSpeedBox = 0.5f;
-float rainbowSpeedHealth = 0.5f;
-float rainbowSpeedHealTextEsp = 0.5f;
+// ESP Speed   
+float Speed = 0.5f;
+float SpeedNameEsp = 0.5f;
+float SpeedWeaponEsp = 0.5f;
+float SpeedSkeleton = 0.5f;
+float SpeedBox = 0.5f;
+float SpeedHealth = 0.5f;
+float SpeedHealTextEsp = 0.5f;
 float skeletonLineThickness = 2.0f;
 
 RGBs white = { 1.0f, 1.0f, 1.0f };
@@ -161,19 +162,19 @@ void LoadConfig(const std::string& filePath) {
         triggerbotKey = config.value("triggerbotKey", ImGuiKey_None);
         watermarkTransparency = config.value("watermarkTransparency", 0.5f);
 
-        rainbowNameEsp = config.value("rainbowNameEsp", false);
-        rainbowWeaponEsp = config.value("rainbowWeaponEsp", false);
-        rainbowSkeleton = config.value("rainbowSkeleton", false);
-        rainbowBox = config.value("rainbowBox", false);
-        rainbowHealth = config.value("rainbowHealth", false);
-        rainbowHealTextEsp = config.value("rainbowHealTextEsp", false);
+        colorModeNameEsp = config.value("colorModeNameEsp", Static);
+        colorModeWeaponEsp = config.value("colorModeWeaponEsp", Static);
+        colorModeSkeleton = config.value("colorModeSkeleton", Static);
+        colorModeBox = config.value("colorModeBox", Static);
+        colorModeHealth = config.value("colorModeHealth", Static);
+        colorModeHealTextEsp = config.value("colorModeHealTextEsp", Static);
 
-        rainbowSpeedNameEsp = config.value("rainbowSpeedNameEsp", 0.5f);
-        rainbowSpeedWeaponEsp = config.value("rainbowSpeedWeaponEsp", 0.5f);
-        rainbowSpeedSkeleton = config.value("rainbowSpeedSkeleton", 0.5f);
-        rainbowSpeedBox = config.value("rainbowSpeedBox", 0.5f);
-        rainbowSpeedHealth = config.value("rainbowSpeedHealth", 0.5f);
-        rainbowSpeedHealTextEsp = config.value("rainbowSpeedHealTextEsp", 0.5f);
+        SpeedNameEsp = config.value("SpeedNameEsp", 0.5f);
+        SpeedWeaponEsp = config.value("SpeedWeaponEsp", 0.5f);
+        SpeedSkeleton = config.value("SpeedSkeleton", 0.5f);
+        SpeedBox = config.value("SpeedBox", 0.5f);
+        SpeedHealth = config.value("SpeedHealth", 0.5f);
+        SpeedHealTextEsp = config.value("SpeedHealTextEsp", 0.5f);
 
         skeletonLineThickness = config.value("skeletonLineThickness", 2.0f);
 
@@ -256,19 +257,19 @@ void SaveConfig(const std::string& filePath) {
         config["triggerbotKey"] = triggerbotKey;
         config["watermarkTransparency"] = watermarkTransparency;
 
-        config["rainbowNameEsp"] = rainbowNameEsp;
-        config["rainbowWeaponEsp"] = rainbowWeaponEsp;
-        config["rainbowSkeleton"] = rainbowSkeleton;
-        config["rainbowBox"] = rainbowBox;
-        config["rainbowHealth"] = rainbowHealth;
-        config["rainbowHealTextEsp"] = rainbowHealTextEsp;
+        config["colorModeNameEsp"] = colorModeNameEsp;
+        config["colorModeWeaponEsp"] = colorModeWeaponEsp;
+        config["colorModeSkeleton"] = colorModeSkeleton;
+        config["colorModeBox"] = colorModeBox;
+        config["colorModeHealth"] = colorModeHealth;
+        config["colorModeHealTextEsp"] = colorModeHealTextEsp;
 
-        config["rainbowSpeedNameEsp"] = rainbowSpeedNameEsp;
-        config["rainbowSpeedWeaponEsp"] = rainbowSpeedWeaponEsp;
-        config["rainbowSpeedSkeleton"] = rainbowSpeedSkeleton;
-        config["rainbowSpeedBox"] = rainbowSpeedBox;
-        config["rainbowSpeedHealth"] = rainbowSpeedHealth;
-        config["rainbowSpeedHealTextEsp"] = rainbowSpeedHealTextEsp;
+        config["SpeedNameEsp"] = SpeedNameEsp;
+        config["SpeedWeaponEsp"] = SpeedWeaponEsp;
+        config["SpeedSkeleton"] = SpeedSkeleton;
+        config["SpeedBox"] = SpeedBox;
+        config["SpeedHealth"] = SpeedHealth;
+        config["SpeedHealTextEsp"] = SpeedHealTextEsp;
 
         config["skeletonLineThickness"] = skeletonLineThickness;
 
@@ -469,9 +470,11 @@ namespace offset {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Lua API Section
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// This works but it needs to add documentation for the variables, that is, create the cheat API so it can be used in Luas. 
+// I don't think I'll make the API because it's not a very well-known cheat, but if you're going to copy this, make the API so it works.
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Global Lua variable
 lua_State* L;
@@ -871,16 +874,6 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
 
             static int activeTab = 0;
 
-            RGBs boxColorToUse = rainbowBox ? RGBs{ GetRainbowColor(rainbowSpeedBox).x, GetRainbowColor(rainbowSpeedBox).y, GetRainbowColor(rainbowSpeedBox).z } : boxColor;
-            RGBs skeletonColorToUse = rainbowSkeleton ? RGBs{ GetRainbowColor(rainbowSpeedSkeleton).x, GetRainbowColor(rainbowSpeedSkeleton).y, GetRainbowColor(rainbowSpeedSkeleton).z } : skeletonColor;
-            RGBs nameColorToUse = rainbowNameEsp ? RGBs{ GetRainbowColor(rainbowSpeedNameEsp).x, GetRainbowColor(rainbowSpeedNameEsp).y, GetRainbowColor(rainbowSpeedNameEsp).z } : NameEspColor;
-            RGBs weaponColorToUse = rainbowWeaponEsp ? RGBs{ GetRainbowColor(rainbowSpeedWeaponEsp).x, GetRainbowColor(rainbowSpeedWeaponEsp).y, GetRainbowColor(rainbowSpeedWeaponEsp).z } : WeaponEspColor;
-            RGBs healTextColorToUse = rainbowHealTextEsp ? RGBs{ GetRainbowColor(rainbowSpeedHealTextEsp).x, GetRainbowColor(rainbowSpeedHealTextEsp).y, GetRainbowColor(rainbowSpeedHealTextEsp).z } : HealTextEspColor;
-            RGBs healthColorToUse = rainbowHealth ? RGBs{ GetRainbowColor(rainbowSpeedHealth).x, GetRainbowColor(rainbowSpeedHealth).y, GetRainbowColor(rainbowSpeedHealth).z } : healthColor;
-
-            ImVec4 rainbowBoxColor = GetRainbowColor(rainbowSpeedBox);
-            boxColorToUse = rainbowBox ? RGBs{ rainbowBoxColor.x, rainbowBoxColor.y, rainbowBoxColor.z } : boxColor;
-
             if (ImGui::BeginTabBar("MainTabsBar")) {
                 if (ImGui::BeginTabItem("Aimbot")) {
                     // Contenido de la pestaña Aimbot
@@ -922,10 +915,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     }
                     if (ImGui::BeginPopup("NameESPColorPicker")) {
                         ImGui::ColorPicker3("##picker", (float*)&NameEspColor);
-                        ImGui::SliderFloat("Rainbow Speed", &rainbowSpeedNameEsp, 0.1f, 5.0f, "%.1f");
-                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse", "Adaptive" };
-                        static int currentColorMode = 0;
-                        ImGui::Combo("Color Mode", &currentColorMode, colorModes, IM_ARRAYSIZE(colorModes));
+                        ImGui::SliderFloat("Speed", &SpeedNameEsp, 0.1f, 5.0f, "%.1f");
+                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse" };
+                        ImGui::Combo("Color Mode", &colorModeNameEsp, colorModes, IM_ARRAYSIZE(colorModes));
                         ImGui::EndPopup();
                     }
 
@@ -936,10 +928,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     }
                     if (ImGui::BeginPopup("WeaponESPColorPicker")) {
                         ImGui::ColorPicker3("##picker", (float*)&WeaponEspColor);
-                        ImGui::SliderFloat("Rainbow Speed", &rainbowSpeedWeaponEsp, 0.1f, 5.0f, "%.1f");
-                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse", "Adaptive" };
-                        static int currentColorMode = 0;
-                        ImGui::Combo("Color Mode", &currentColorMode, colorModes, IM_ARRAYSIZE(colorModes));
+                        ImGui::SliderFloat("Speed", &SpeedWeaponEsp, 0.1f, 5.0f, "%.1f");
+                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse" };
+                        ImGui::Combo("Color Mode", &colorModeWeaponEsp, colorModes, IM_ARRAYSIZE(colorModes));
                         ImGui::EndPopup();
                     }
 
@@ -950,11 +941,10 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     }
                     if (ImGui::BeginPopup("SkeletonColorPicker")) {
                         ImGui::ColorPicker3("##picker", (float*)&skeletonColor);
-                        ImGui::SliderFloat("Rainbow Speed", &rainbowSpeedSkeleton, 0.1f, 5.0f, "%.1f");
+                        ImGui::SliderFloat("Speed", &SpeedSkeleton, 0.1f, 5.0f, "%.1f");
                         ImGui::SliderFloat("Line Thickness", &skeletonLineThickness, 1.0f, 5.0f, "%.1f");
-                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse", "Adaptive" };
-                        static int currentColorMode = 0;
-                        ImGui::Combo("Color Mode", &currentColorMode, colorModes, IM_ARRAYSIZE(colorModes));
+                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse" };
+                        ImGui::Combo("Color Mode", &colorModeSkeleton, colorModes, IM_ARRAYSIZE(colorModes));
                         ImGui::EndPopup();
                     }
 
@@ -965,10 +955,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     }
                     if (ImGui::BeginPopup("BoxColorPicker")) {
                         ImGui::ColorPicker3("##picker", (float*)&boxColor);
-                        ImGui::SliderFloat("Rainbow Speed", &rainbowSpeedBox, 0.1f, 5.0f, "%.1f");
-                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse", "Adaptive" };
-                        static int currentColorMode = 0;
-                        ImGui::Combo("Color Mode", &currentColorMode, colorModes, IM_ARRAYSIZE(colorModes));
+                        ImGui::SliderFloat("Speed", &SpeedBox, 0.1f, 5.0f, "%.1f");
+                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse" };
+                        ImGui::Combo("Color Mode", &colorModeBox, colorModes, IM_ARRAYSIZE(colorModes));
                         ImGui::EndPopup();
                     }
 
@@ -979,10 +968,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     }
                     if (ImGui::BeginPopup("HealthColorPicker")) {
                         ImGui::ColorPicker3("##picker", (float*)&healthColor);
-                        ImGui::SliderFloat("Rainbow Speed", &rainbowSpeedHealth, 0.1f, 5.0f, "%.1f");
-                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse", "Adaptive" };
-                        static int currentColorMode = 0;
-                        ImGui::Combo("Color Mode", &currentColorMode, colorModes, IM_ARRAYSIZE(colorModes));
+                        ImGui::SliderFloat("Speed", &SpeedHealth, 0.1f, 5.0f, "%.1f");
+                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse" };
+                        ImGui::Combo("Color Mode", &colorModeHealth, colorModes, IM_ARRAYSIZE(colorModes));
                         ImGui::EndPopup();
                     }
 
@@ -993,10 +981,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     }
                     if (ImGui::BeginPopup("HealTextESPColorPicker")) {
                         ImGui::ColorPicker3("##picker", (float*)&HealTextEspColor);
-                        ImGui::SliderFloat("Rainbow Speed", &rainbowSpeedHealTextEsp, 0.1f, 5.0f, "%.1f");
-                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse", "Adaptive" };
-                        static int currentColorMode = 0;
-                        ImGui::Combo("Color Mode", &currentColorMode, colorModes, IM_ARRAYSIZE(colorModes));
+                        ImGui::SliderFloat("Speed", &SpeedHealTextEsp, 0.1f, 5.0f, "%.1f");
+                        static const char* colorModes[] = { "Static", "Rainbow", "Pulse" };
+                        ImGui::Combo("Color Mode", &colorModeHealTextEsp, colorModes, IM_ARRAYSIZE(colorModes));
                         ImGui::EndPopup();
                     }
                     ImGui::EndTabItem();
@@ -1063,169 +1050,14 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     if (ImGui::Button("Load Selected", ImVec2(150, 40))) {
                         if (!configFiles.empty()) {
                             std::string selectedFile = GetConfigPath().substr(0, GetConfigPath().find_last_of("\\/")) + "\\" + configFiles[selectedConfig];
-                            std::ifstream file(selectedFile);
-                            if (file.is_open()) {
-                                json config;
-                                file >> config;
-                                file.close();
-
-                                espEnabled = config.value("espEnabled", false);
-                                healthEnabled = config.value("healthEnabled", false);
-                                NameEsp = config.value("NameEsp", false);
-                                WeaponEsp = config.value("WeaponEsp", false);
-                                HealTextEsp = config.value("HealTextEsp", false);
-                                skeletonEnabled = config.value("skeletonEnabled", false);
-                                boxEnabled = config.value("boxEnabled", false);
-                                watermarkEnabled = config.value("watermarkEnabled", false);
-                                NoFlash = config.value("NoFlash", false);
-								fakeAngles = config.value("fakeAngles", false);
-                                JumpThrow = config.value("JumpThrow", false);
-                                JumpKey = config.value("JumpKey", ImGuiKey_None);
-								AutoAccept = config.value("AutoAccept", false);
-                                triggerbotEnabled = config.value("triggerbotEnabled", false);
-                                triggerbotDelay = config.value("triggerbotDelay", 3);
-                                triggerbotMode = static_cast<TriggerbotMode>(config.value("triggerbotMode", Always));
-                                triggerbotKey = config.value("triggerbotKey", ImGuiKey_None);
-                                watermarkTransparency = config.value("watermarkTransparency", 0.5f);
-
-                                rainbowNameEsp = config.value("rainbowNameEsp", false);
-                                rainbowWeaponEsp = config.value("rainbowWeaponEsp", false);
-                                rainbowSkeleton = config.value("rainbowSkeleton", false);
-                                rainbowBox = config.value("rainbowBox", false);
-                                rainbowHealth = config.value("rainbowHealth", false);
-                                rainbowHealTextEsp = config.value("rainbowHealTextEsp", false);
-
-                                rainbowSpeedNameEsp = config.value("rainbowSpeedNameEsp", 0.5f);
-                                rainbowSpeedWeaponEsp = config.value("rainbowSpeedWeaponEsp", 0.5f);
-                                rainbowSpeedSkeleton = config.value("rainbowSpeedSkeleton", 0.5f);
-                                rainbowSpeedBox = config.value("rainbowSpeedBox", 0.5f);
-                                rainbowSpeedHealth = config.value("rainbowSpeedHealth", 0.5f);
-                                rainbowSpeedHealTextEsp = config.value("rainbowSpeedHealTextEsp", 0.5f);
-
-                                skeletonLineThickness = config.value("skeletonLineThickness", 2.0f);
-
-                                auto skeletonColorArray = config.value("skeletonColor", std::vector<float>{1.0f, 1.0f, 1.0f});
-                                skeletonColor = { skeletonColorArray[0], skeletonColorArray[1], skeletonColorArray[2] };
-
-                                auto boxColorArray = config.value("boxColor", std::vector<float>{1.0f, 1.0f, 1.0f});
-                                boxColor = { boxColorArray[0], boxColorArray[1], boxColorArray[2] };
-
-                                auto healthColorArray = config.value("healthColor", std::vector<float>{1.0f, 1.0f, 1.0f});
-                                healthColor = { healthColorArray[0], healthColorArray[1], healthColorArray[2] };
-
-                                auto NameEspColorArray = config.value("NameEspColor", std::vector<float>{1.0f, 1.0f, 1.0f});
-                                NameEspColor = { NameEspColorArray[0], NameEspColorArray[1], NameEspColorArray[2] };
-
-                                auto WeaponEspColorArray = config.value("WeaponEspColor", std::vector<float>{1.0f, 1.0f, 1.0f});
-                                WeaponEspColor = { WeaponEspColorArray[0], WeaponEspColorArray[1], WeaponEspColorArray[2] };
-
-                                auto HealTextEspColorArray = config.value("HealTextEspColor", std::vector<float>{1.0f, 1.0f, 1.0f});
-                                HealTextEspColor = { HealTextEspColorArray[0], HealTextEspColorArray[1], HealTextEspColorArray[2] };
-
-                                auto bgColorArray = config.value("bgColor", std::vector<float>{25 / 255.0f, 25 / 255.0f, 25 / 255.0f, 1.0f});
-                                bgColor = { bgColorArray[0], bgColorArray[1], bgColorArray[2], bgColorArray[3] };
-
-                                auto tabActiveColorArray = config.value("tabActiveColor", std::vector<float>{179 / 255.0f, 77 / 255.0f, 51 / 255.0f, 1.0f});
-                                tabActiveColor = { tabActiveColorArray[0], tabActiveColorArray[1], tabActiveColorArray[2], tabActiveColorArray[3] };
-
-                                auto tabInactiveColorArray = config.value("tabInactiveColor", std::vector<float>{0 / 255.0f, 0 / 255.0f, 0 / 255.0f, 1.0f});
-                                tabInactiveColor = { tabInactiveColorArray[0], tabInactiveColorArray[1], tabInactiveColorArray[2], tabInactiveColorArray[3] };
-
-                                auto tabHoveredColorArray = config.value("tabHoveredColor", std::vector<float>{65 / 255.0f, 63 / 255.0f, 62 / 255.0f, 1.0f});
-                                tabHoveredColor = { tabHoveredColorArray[0], tabHoveredColorArray[1], tabHoveredColorArray[2], tabHoveredColorArray[3] };
-
-                                auto textColorArray = config.value("textColor", std::vector<float>{255 / 255.0f, 255 / 255.0f, 255 / 255.0f, 1.0f});
-                                textColor = { textColorArray[0], textColorArray[1], textColorArray[2], textColorArray[3] };
-
-                                auto checkboxActiveArray = config.value("checkboxActive", std::vector<float>{255 / 255.0f, 165 / 255.0f, 0 / 255.0f, 1.0f});
-                                checkboxActive = { checkboxActiveArray[0], checkboxActiveArray[1], checkboxActiveArray[2], checkboxActiveArray[3] };
-
-                                auto FramebcArray = config.value("Framebc", std::vector<float>{51 / 255.0f, 51 / 255.0f, 51 / 255.0f, 1.0f});
-                                Framebc = { FramebcArray[0], FramebcArray[1], FramebcArray[2], FramebcArray[3] };
-
-                                auto FrameHoverArray = config.value("FrameHover", std::vector<float>{128 / 255.0f, 128 / 255.0f, 128 / 255.0f, 1.0f});
-                                FrameHover = { FrameHoverArray[0], FrameHoverArray[1], FrameHoverArray[2], FrameHoverArray[3] };
-
-                                auto buttonColorArray = config.value("buttonColor", std::vector<float>{255 / 255.0f, 165 / 255.0f, 0 / 255.0f, 1.0f});
-                                buttonColor = { buttonColorArray[0], buttonColorArray[1], buttonColorArray[2], buttonColorArray[3] };
-
-                                auto watermarkTextColorArray = config.value("watermarkTextColor", std::vector<float>{255 / 255.0f, 255 / 255.0f, 255 / 255.0f, 1.0f});
-                                watermarkTextColor = { watermarkTextColorArray[0], watermarkTextColorArray[1], watermarkTextColorArray[2], watermarkTextColorArray[3] };
-
-                                auto watermarkBackGroundColorArray = config.value("watermarkBackGroundColor", std::vector<float>{0 / 255.0f, 0 / 255.0f, 0 / 255.0f, 1.0f});
-                                watermarkBackGroundColor = { watermarkBackGroundColorArray[0], watermarkBackGroundColorArray[1], watermarkBackGroundColorArray[2], watermarkBackGroundColorArray[3] };
-
-                                auto corcustomArray = config.value("corcustom", std::vector<float>{255 / 255.0f, 0 / 255.0f, 0 / 255.0f, 1.0f});
-                                corcustom = { corcustomArray[0], corcustomArray[1], corcustomArray[2], corcustomArray[3] };
-                            }
+                            LoadConfig(selectedFile);
                         }
                     }
 
                     if (ImGui::Button("Save Selected", ImVec2(150, 40))) {
                         if (!configFiles.empty()) {
                             std::string selectedFile = GetConfigPath().substr(0, GetConfigPath().find_last_of("\\/")) + "\\" + configFiles[selectedConfig];
-                            std::ofstream outFile(selectedFile);
-                            if (outFile.is_open()) {
-                                json config;
-                                config["espEnabled"] = espEnabled;
-                                config["healthEnabled"] = healthEnabled;
-                                config["NameEsp"] = NameEsp;
-                                config["WeaponEsp"] = WeaponEsp;
-                                config["HealTextEsp"] = HealTextEsp;
-                                config["skeletonEnabled"] = skeletonEnabled;
-                                config["boxEnabled"] = boxEnabled;
-                                config["watermarkEnabled"] = watermarkEnabled;
-                                config["NoFlash"] = NoFlash;
-								config["fakeAngles"] = fakeAngles;
-                                config["JumpThrow"] = JumpThrow;
-                                config["JumpKey"] = JumpKey;
-								config["AutoAccept"] = AutoAccept;
-                                config["triggerbotEnabled"] = triggerbotEnabled;
-                                config["triggerbotDelay"] = triggerbotDelay;
-                                config["triggerbotMode"] = triggerbotMode;
-                                config["triggerbotKey"] = triggerbotKey;
-                                config["watermarkTransparency"] = watermarkTransparency;
-
-                                config["rainbowNameEsp"] = rainbowNameEsp;
-                                config["rainbowWeaponEsp"] = rainbowWeaponEsp;
-                                config["rainbowSkeleton"] = rainbowSkeleton;
-                                config["rainbowBox"] = rainbowBox;
-                                config["rainbowHealth"] = rainbowHealth;
-                                config["rainbowHealTextEsp"] = rainbowHealTextEsp;
-
-                                config["rainbowSpeedNameEsp"] = rainbowSpeedNameEsp;
-                                config["rainbowSpeedWeaponEsp"] = rainbowSpeedWeaponEsp;
-                                config["rainbowSpeedSkeleton"] = rainbowSpeedSkeleton;
-                                config["rainbowSpeedBox"] = rainbowSpeedBox;
-                                config["rainbowSpeedHealth"] = rainbowSpeedHealth;
-                                config["rainbowSpeedHealTextEsp"] = rainbowSpeedHealTextEsp;
-
-                                config["skeletonLineThickness"] = skeletonLineThickness;
-
-                                config["skeletonColor"] = { skeletonColor.r, skeletonColor.g, skeletonColor.b };
-                                config["boxColor"] = { boxColor.r, boxColor.g, boxColor.b };
-                                config["healthColor"] = { healthColor.r, healthColor.g, healthColor.b };
-                                config["NameEspColor"] = { NameEspColor.r, NameEspColor.g, NameEspColor.b };
-                                config["WeaponEspColor"] = { WeaponEspColor.r, WeaponEspColor.g, WeaponEspColor.b };
-                                config["HealTextEspColor"] = { HealTextEspColor.r, HealTextEspColor.g, HealTextEspColor.b };
-
-                                config["bgColor"] = { bgColor.x, bgColor.y, bgColor.z, bgColor.w };
-                                config["tabActiveColor"] = { tabActiveColor.x, tabActiveColor.y, tabActiveColor.z, tabActiveColor.w };
-                                config["tabInactiveColor"] = { tabInactiveColor.x, tabInactiveColor.y, tabInactiveColor.z, tabInactiveColor.w };
-                                config["tabHoveredColor"] = { tabHoveredColor.x, tabHoveredColor.y, tabHoveredColor.z, tabHoveredColor.w };
-                                config["textColor"] = { textColor.x, textColor.y, textColor.z, textColor.w };
-                                config["checkboxActive"] = { checkboxActive.x, checkboxActive.y, checkboxActive.z, checkboxActive.w };
-                                config["Framebc"] = { Framebc.x, Framebc.y, Framebc.z, Framebc.w };
-                                config["FrameHover"] = { FrameHover.x, FrameHover.y, FrameHover.z, FrameHover.w };
-                                config["buttonColor"] = { buttonColor.x, buttonColor.y, buttonColor.z, buttonColor.w };
-                                config["watermarkTextColor"] = { watermarkTextColor.x, watermarkTextColor.y, watermarkTextColor.z, watermarkTextColor.w };
-                                config["watermarkBackGroundColor"] = { watermarkBackGroundColor.x, watermarkBackGroundColor.y, watermarkBackGroundColor.z, watermarkBackGroundColor.w };
-                                config["corcustom"] = { corcustom.x, corcustom.y, corcustom.z, corcustom.w };
-
-                                outFile << config.dump(4);
-                                outFile.close();
-                                RefreshConfigList();
-                            }
+                            SaveConfig(selectedFile);
                         }
                     }
 
@@ -1266,19 +1098,19 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                             triggerbotKey = ImGuiKey_None;
                             watermarkTransparency = 0.5f;
 
-                            rainbowNameEsp = false;
-                            rainbowWeaponEsp = false;
-                            rainbowSkeleton = false;
-                            rainbowBox = false;
-                            rainbowHealth = false;
-                            rainbowHealTextEsp = false;
+                            colorModeNameEsp = Static;
+                            colorModeWeaponEsp = Static;
+                            colorModeSkeleton = Static;
+                            colorModeBox = Static;
+                            colorModeHealth = Static;
+                            colorModeHealTextEsp = Static;
 
-                            rainbowSpeedNameEsp = 0.5f;
-                            rainbowSpeedWeaponEsp = 0.5f;
-                            rainbowSpeedSkeleton = 0.5f;
-                            rainbowSpeedBox = 0.5f;
-                            rainbowSpeedHealth = 0.5f;
-                            rainbowSpeedHealTextEsp = 0.5f;
+                            SpeedNameEsp = 0.5f;
+                            SpeedWeaponEsp = 0.5f;
+                            SpeedSkeleton = 0.5f;
+                            SpeedBox = 0.5f;
+                            SpeedHealth = 0.5f;
+                            SpeedHealTextEsp = 0.5f;
 
                             skeletonLineThickness = 2.0f;
 
@@ -1317,68 +1149,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     if (ImGui::Button("Save As", ImVec2(100, 40))) {
                         if (strlen(newConfigName) > 0) {
                             std::string newConfigPath = GetConfigPath().substr(0, GetConfigPath().find_last_of("\\/")) + "\\" + std::string(newConfigName) + ".json";
-                            std::ofstream outFile(newConfigPath);
-                            if (outFile.is_open()) {
-                                json config;
-                                config["espEnabled"] = espEnabled;
-                                config["healthEnabled"] = healthEnabled;
-                                config["NameEsp"] = NameEsp;
-                                config["WeaponEsp"] = WeaponEsp;
-                                config["HealTextEsp"] = HealTextEsp;
-                                config["skeletonEnabled"] = skeletonEnabled;
-                                config["boxEnabled"] = boxEnabled;
-                                config["watermarkEnabled"] = watermarkEnabled;
-                                config["NoFlash"] = NoFlash;
-								config["fakeAngles"] = fakeAngles;
-                                config["JumpThrow"] = JumpThrow;
-                                config["JumpKey"] = JumpKey;
-								config["AutoAccept"] = AutoAccept;
-                                config["triggerbotEnabled"] = triggerbotEnabled;
-                                config["triggerbotDelay"] = triggerbotDelay;
-                                config["triggerbotMode"] = triggerbotMode;
-                                config["triggerbotKey"] = triggerbotKey;
-                                config["watermarkTransparency"] = watermarkTransparency;
-
-                                config["rainbowNameEsp"] = rainbowNameEsp;
-                                config["rainbowWeaponEsp"] = rainbowWeaponEsp;
-                                config["rainbowSkeleton"] = rainbowSkeleton;
-                                config["rainbowBox"] = rainbowBox;
-                                config["rainbowHealth"] = rainbowHealth;
-                                config["rainbowHealTextEsp"] = rainbowHealTextEsp;
-
-                                config["rainbowSpeedNameEsp"] = rainbowSpeedNameEsp;
-                                config["rainbowSpeedWeaponEsp"] = rainbowSpeedWeaponEsp;
-                                config["rainbowSpeedSkeleton"] = rainbowSpeedSkeleton;
-                                config["rainbowSpeedBox"] = rainbowSpeedBox;
-                                config["rainbowSpeedHealth"] = rainbowSpeedHealth;
-                                config["rainbowSpeedHealTextEsp"] = rainbowSpeedHealTextEsp;
-
-                                config["skeletonLineThickness"] = skeletonLineThickness;
-
-                                config["skeletonColor"] = { skeletonColor.r, skeletonColor.g, skeletonColor.b };
-                                config["boxColor"] = { boxColor.r, boxColor.g, boxColor.b };
-                                config["healthColor"] = { healthColor.r, healthColor.g, healthColor.b };
-                                config["NameEspColor"] = { NameEspColor.r, NameEspColor.g, NameEspColor.b };
-                                config["WeaponEspColor"] = { WeaponEspColor.r, WeaponEspColor.g, WeaponEspColor.b };
-                                config["HealTextEspColor"] = { HealTextEspColor.r, HealTextEspColor.g, HealTextEspColor.b };
-
-                                config["bgColor"] = { bgColor.x, bgColor.y, bgColor.z, bgColor.w };
-                                config["tabActiveColor"] = { tabActiveColor.x, tabActiveColor.y, tabActiveColor.z, tabActiveColor.w };
-                                config["tabInactiveColor"] = { tabInactiveColor.x, tabInactiveColor.y, tabInactiveColor.z, tabInactiveColor.w };
-                                config["tabHoveredColor"] = { tabHoveredColor.x, tabHoveredColor.y, tabHoveredColor.z, tabHoveredColor.w };
-                                config["textColor"] = { textColor.x, textColor.y, textColor.z, textColor.w };
-                                config["checkboxActive"] = { checkboxActive.x, checkboxActive.y, checkboxActive.z, checkboxActive.w };
-                                config["Framebc"] = { Framebc.x, Framebc.y, Framebc.z, Framebc.w };
-                                config["FrameHover"] = { FrameHover.x, FrameHover.y, FrameHover.z, FrameHover.w };
-                                config["buttonColor"] = { buttonColor.x, buttonColor.y, buttonColor.z, buttonColor.w };
-                                config["watermarkTextColor"] = { watermarkTextColor.x, watermarkTextColor.y, watermarkTextColor.z, watermarkTextColor.w };
-                                config["watermarkBackGroundColor"] = { watermarkBackGroundColor.x, watermarkBackGroundColor.y, watermarkBackGroundColor.z, watermarkBackGroundColor.w };
-                                config["corcustom"] = { corcustom.x, corcustom.y, corcustom.z, corcustom.w };
-
-                                outFile << config.dump(4);
-                                outFile.close();
-                                RefreshConfigList();
-                            }
+                            SaveConfig(newConfigPath);
                         }
                     }
                     ImGui::EndTabItem();
@@ -1482,12 +1253,26 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     ImGui::Checkbox("Info", &info);
 
                     if (info) {
-                        ImGui::Text("Jump Throw\nNew GUI\nCheat has been fixed for the latest version of CS2");
+						ImGui::Text("Color Modes\n""organization and documentation");
                     }
                     ImGui::EndTabItem();
                 }
             }
             ImGui::EndTabBar();
+
+            ImVec2 windowPos = ImGui::GetWindowPos();
+            ImVec2 windowSize = ImGui::GetWindowSize();
+            const char* customTitle = "SunSet CS2";
+            ImVec2 textSize = ImGui::CalcTextSize(customTitle);
+
+            float x = windowPos.x + windowSize.x - textSize.x - 75.0f;
+            float y = windowPos.y + 20.0f;
+
+            ImGui::GetWindowDrawList()->AddText(
+                ImVec2(x, y),
+                IM_COL32(255, 180, 50, 255),
+                customTitle
+            );
         }
 
 
@@ -1564,26 +1349,90 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                     if (espEnabled) {
 
                         if (boxEnabled) {
-                            RGBs boxColorToUse = rainbowBox ? RGBs{ GetRainbowColor(0.5f).x, GetRainbowColor(0.5f).y, GetRainbowColor(0.5f).z } : boxColor;
+							RGBs boxColorToUse;
+                            switch (colorModeBox) {
+                            case Rainbow: {
+                                ImVec4 c = GetRainbowColor(SpeedBox);
+                                boxColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Pulse: {
+                                ImVec4 c = GetPulseColor(SpeedBox, ImVec4(boxColor.r, boxColor.g, boxColor.b, 1.0f));
+                                boxColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Static:
+                            default:
+                                boxColorToUse = boxColor;
+                                break;
+                            }
                             Render::DrawRect(screenHead.x - width / 2, screenHead.y, width, height, boxColorToUse, 1.5);
                         }
 
                         if (skeletonEnabled) {
-                            RGBs skeletonColorToUse = rainbowSkeleton ? RGBs{ GetRainbowColor(0.5f).x, GetRainbowColor(0.5f).y, GetRainbowColor(0.5f).z } : skeletonColor;
+                            RGBs skeletonColorToUse;
+                            switch (colorModeSkeleton) {
+                            case Rainbow: {
+                                ImVec4 c = GetRainbowColor(SpeedSkeleton);
+                                skeletonColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Pulse: {
+                                ImVec4 c = GetPulseColor(SpeedSkeleton, ImVec4(skeletonColor.r, skeletonColor.g, skeletonColor.b, 1.0f));
+                                skeletonColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Static:
+                            default:
+                                skeletonColorToUse = skeletonColor;
+                                break;
+                            }
                             Render::Circle(screenHead.x, screenHead.y, headheight - 3, skeletonColorToUse);
                         }
 
                         if (NameEsp) {
                             float nameX = screenHead.x - width / 2;
                             float nameY = screenHead.y - 15;
-                            RGBs nameColorToUse = rainbowNameEsp ? RGBs{ GetRainbowColor(0.5f).x, GetRainbowColor(0.5f).y, GetRainbowColor(0.5f).z } : NameEspColor;
+                            RGBs nameColorToUse;
+                            switch (colorModeNameEsp) {
+                            case Rainbow: {
+                                ImVec4 c = GetRainbowColor(SpeedNameEsp);
+                                nameColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Pulse: {
+                                ImVec4 c = GetPulseColor(SpeedNameEsp, ImVec4(NameEspColor.r, NameEspColor.g, NameEspColor.b, 1.0f));
+                                nameColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Static:
+                            default:
+                                nameColorToUse = NameEspColor;
+                                break;
+                            }
                             Render::DrawText(nameX, nameY, playerName, nameColorToUse);
                         }
 
                         if (WeaponEsp) {
                             float weaponX = screenHead.x - width / 2;
                             float weaponY = screenHead.y + height + 5;
-                            RGBs weaponColorToUse = rainbowWeaponEsp ? RGBs{ GetRainbowColor(0.5f).x, GetRainbowColor(0.5f).y, GetRainbowColor(0.5f).z } : WeaponEspColor;
+							RGBs weaponColorToUse;
+                            switch (colorModeWeaponEsp) {
+                            case Rainbow: {
+                                ImVec4 c = GetRainbowColor(SpeedWeaponEsp);
+                                weaponColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Pulse: {
+                                ImVec4 c = GetPulseColor(SpeedWeaponEsp, ImVec4(WeaponEspColor.r, WeaponEspColor.g, WeaponEspColor.b, 1.0f));
+                                weaponColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Static:
+                            default:
+                                weaponColorToUse = WeaponEspColor;
+                                break;
+                            }
                             Render::DrawText(weaponX, weaponY, weaponName, weaponColorToUse);
                         }
 
@@ -1593,7 +1442,23 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
 
                             float textX = screenHead.x + width / 2 + 10;
                             float textY = screenHead.y + height / 2 - 7;
-                            RGBs healTextColorToUse = rainbowHealTextEsp ? RGBs{ GetRainbowColor(0.5f).x, GetRainbowColor(0.5f).y, GetRainbowColor(0.5f).z } : HealTextEspColor;
+							RGBs healTextColorToUse;
+                            switch (colorModeHealTextEsp) {
+                            case Rainbow: {
+                                ImVec4 c = GetRainbowColor(SpeedHealTextEsp);
+                                healTextColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Pulse: {
+                                ImVec4 c = GetPulseColor(SpeedHealTextEsp, ImVec4(HealTextEspColor.r, HealTextEspColor.g, HealTextEspColor.b, 1.0f));
+                                healTextColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Static:
+                            default:
+                                healTextColorToUse = HealTextEspColor;
+                                break;
+                            }
                             Render::DrawText(textX, textY, healthText, healTextColorToUse);
                         }
 
@@ -1601,14 +1466,46 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                             float healthBarXStart = screenHead.x + width / 2 + 5;
                             float healthBarYStart = screenHead.y + height;
                             float healthBarYEnd = screenHead.y + height - healthBarHeight;
-                            RGBs healthColorToUse = rainbowHealth ? RGBs{ GetRainbowColor(0.5f).x, GetRainbowColor(0.5f).y, GetRainbowColor(0.5f).z } : healthColor;
+							RGBs healthColorToUse;
+                            switch (colorModeHealth) {
+                            case Rainbow: {
+                                ImVec4 c = GetRainbowColor(SpeedHealth);
+                                healthColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Pulse: {
+                                ImVec4 c = GetPulseColor(SpeedHealth, ImVec4(healthColor.r, healthColor.g, healthColor.b, 1.0f));
+                                healthColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Static:
+                            default:
+                                healthColorToUse = healthColor;
+                                break;
+                            }
 
                             Render::Line(healthBarXStart, screenHead.y + height, healthBarXStart, screenHead.y, RGBs{ 102 / 255.0f, 102 / 255.0f, 102 / 255.0f }, 2.0f);
                             Render::Line(healthBarXStart, healthBarYStart, healthBarXStart, healthBarYEnd, healthColorToUse, 2.0f);
                         }
 
                         if (skeletonEnabled) {
-                            RGBs skeletonColorToUse = rainbowSkeleton ? RGBs{ GetRainbowColor(rainbowSpeedSkeleton).x, GetRainbowColor(rainbowSpeedSkeleton).y, GetRainbowColor(rainbowSpeedSkeleton).z } : skeletonColor;
+                            RGBs skeletonColorToUse;
+                            switch (colorModeSkeleton) {
+                            case Rainbow: {
+                                ImVec4 c = GetRainbowColor(SpeedSkeleton);
+                                skeletonColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Pulse: {
+                                ImVec4 c = GetPulseColor(SpeedSkeleton, ImVec4(skeletonColor.r, skeletonColor.g, skeletonColor.b, 1.0f));
+                                skeletonColorToUse = { c.x, c.y, c.z };
+                                break;
+                            }
+                            case Static:
+                            default:
+                                skeletonColorToUse = skeletonColor;
+                                break;
+                            }
                             for (const auto& connection : boneConnections) {
                                 int bone1 = connection.bone1;
                                 int bone2 = connection.bone2;
