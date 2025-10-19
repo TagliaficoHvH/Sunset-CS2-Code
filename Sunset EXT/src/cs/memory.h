@@ -14,8 +14,6 @@ private:
     void* processHandle = nullptr;
 
 public:
-    // Constructor que encuentra el id del proceso
-    // y abre un handle
     Memory(const std::string_view processName) noexcept
     {
         ::PROCESSENTRY32 entry = { };
@@ -33,19 +31,16 @@ public:
             }
         }
 
-        // Liberar handle
         if (snapShot)
             ::CloseHandle(snapShot);
     }
 
-    // Destructor que libera el handle abierto
     ~Memory()
     {
         if (processHandle)
             ::CloseHandle(processHandle);
     }
 
-    // Devuelve la direcci?n base de un m?dulo por nombre
     const std::uintptr_t GetModuleAddress(const std::string_view moduleName) const noexcept
     {
         ::MODULEENTRY32 entry = { };
@@ -70,7 +65,6 @@ public:
         return result;
     }
 
-    // Leer memoria del proceso
     template <typename T>
     constexpr const T Read(const std::uintptr_t& address) const noexcept
     {
@@ -79,33 +73,28 @@ public:
         return value;
     }
 
-    // Escribir memoria del proceso
     template <typename T>
     constexpr void Write(const std::uintptr_t& address, const T& value) const noexcept
     {
         ::WriteProcessMemory(processHandle, reinterpret_cast<void*>(address), &value, sizeof(T), NULL);
     }
 
-    // Leer una cadena de la memoria del proceso
     void ReadString(const std::uintptr_t& address, char* buffer, std::size_t size) const noexcept
     {
         ::ReadProcessMemory(processHandle, reinterpret_cast<const void*>(address), buffer, size, NULL);
     }
 
-    // Leer un array de la memoria del proceso
     template <typename T>
     void ReadArray(const std::uintptr_t& address, T* buffer, std::size_t size) const noexcept
     {
         ::ReadProcessMemory(processHandle, reinterpret_cast<const void*>(address), buffer, size * sizeof(T), NULL);
     }
 
-    // Leer datos en bruto de la memoria del proceso
     bool ReadRaw(const std::uintptr_t& address, void* buffer, std::size_t size) const noexcept
     {
         return ::ReadProcessMemory(processHandle, reinterpret_cast<const void*>(address), buffer, size, NULL) != 0;
     }
 };
 
-// Declarar las variables globales
 extern Memory mem;
 extern std::uintptr_t client;

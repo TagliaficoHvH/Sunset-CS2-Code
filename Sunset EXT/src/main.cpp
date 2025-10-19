@@ -30,8 +30,8 @@
 #include "legit/misc/JumpThrow/JumpThrow.h"
 #include "legit/misc/FakeAngles/FakeAngles.h"
 #include "legit/misc/AutoAccept/AutoAccept.h"
+#include "cs/offsets.h"
 #include "cs/bone.hpp"
-#include "cs/entity.hpp"
 #include "cs/vector.h"
 #include "cs/view_matrix.hpp"
 #include "cs/weapon_index.h"
@@ -1290,7 +1290,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                 if (!listenentry)
                     continue;
 
-                uintptr_t player = mem.Read<uintptr_t>(listenentry + 120 * (playerIndex & 0x1FF));
+                uintptr_t player = mem.Read<uintptr_t>(listenentry + 0x70 * (playerIndex & 0x1FF));
 
                 if (!player)
                     continue;
@@ -1306,7 +1306,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
                 if (!listenentry2)
                     continue;
 
-                uintptr_t pCSPlayerPawn = mem.Read<uintptr_t>(listenentry2 + 120 * (playerPawn & 0x1FF));
+                uintptr_t pCSPlayerPawn = mem.Read<uintptr_t>(listenentry2 + 0x70 * (playerPawn & 0x1FF));
 
                 if (!pCSPlayerPawn)
                     continue;

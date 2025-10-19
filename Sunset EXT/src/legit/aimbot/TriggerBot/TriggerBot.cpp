@@ -48,7 +48,7 @@ void HandleTriggerBot(Memory& mem, std::uintptr_t client) {
                     uintptr_t listenentry = mem.Read<uintptr_t>(entity_list + (8 * (playerIndex & 0x7FFF) >> 9) + 16);
                     if (!listenentry) continue;
 
-                    uintptr_t player = mem.Read<uintptr_t>(listenentry + 120 * (playerIndex & 0x1FF));
+                    uintptr_t player = mem.Read<uintptr_t>(listenentry + 0x70 * (playerIndex & 0x1FF));
                     if (!player) continue;
 
                     int playerTeam = mem.Read<int>(player + offset::m_iTeamNum);
@@ -58,7 +58,7 @@ void HandleTriggerBot(Memory& mem, std::uintptr_t client) {
                     if (crosshair_entity_index < 0) continue;
 
                     uintptr_t listEntry = mem.Read<uintptr_t>(entity_list + 0x8 * (crosshair_entity_index >> 9) + 0x10);
-                    uintptr_t entity = mem.Read<uintptr_t>(listEntry + 120 * (crosshair_entity_index & 0x1ff));
+                    uintptr_t entity = mem.Read<uintptr_t>(listEntry + 0x70 * (crosshair_entity_index & 0x1ff));
                     if (!entity) continue;
 
                     int entityTeam = mem.Read<int>(entity + offset::m_iTeamNum);
