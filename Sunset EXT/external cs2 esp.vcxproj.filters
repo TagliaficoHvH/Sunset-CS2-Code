@@ -39,9 +39,6 @@
     <ClCompile Include="external\ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cs\entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\cs\vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -162,9 +159,6 @@
     <ClCompile Include="external\lua-5.4.7\src\lzio.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cs\color.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\legit\misc\JumpThrow\JumpThrow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -213,9 +207,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\cs\weapon_index.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cs\entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\cs\vector.hpp">
@@ -333,9 +324,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="external\nlohmann\json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cs\color.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\legit\misc\JumpThrow\JumpThrow.h">

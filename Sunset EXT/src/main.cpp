@@ -387,15 +387,15 @@ void extractOffsets(const std::string& content,
 }
 
 void updateOffsets() {
-    // URLs RAW
-    std::string urlClientDll = "https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.cs";
-    std::string urlOffsets = "https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.cs";
+    // URLs locales (tu servidor)
+    std::string urlClientDll = "https://cs2-offsets-server.onrender.com/client_dll";
+    std::string urlOffsets = "https://cs2-offsets-server.onrender.com/offsets";
 
     // Offsets que queremos extraer
     std::vector<std::string> clientDllOffsets = {
         "m_flFlashBangTime", "m_iIDEntIndex", "m_fFlags", "v_angle", "m_iHealth", "m_iTeamNum",
         "m_vOldOrigin", "m_hPlayerPawn", "m_pGameSceneNode", "m_modelState",
-        "m_entitySpottedState", "m_pPawnSubclass", "m_sSanitizedPlayerName", "m_pClippingWeapon",
+        "m_entitySpottedState", "m_sSanitizedPlayerName", "m_pClippingWeapon",
         "m_AttributeManager", "m_Item", "m_iItemDefinitionIndex", "m_iAccount",
         "m_hPawn", "m_bIsLocalPlayerController", "m_iPing"
     };
@@ -404,27 +404,39 @@ void updateOffsets() {
         "dwViewMatrix", "dwLocalPlayerPawn", "dwEntityList", "dwLocalPlayerController", "dwViewAngles"
     };
 
-    // Descargar los archivos
+    // Descargar los archivos desde el servidor
     std::string clientDllContent = downloadFile(urlClientDll);
     std::string offsetsContent = downloadFile(urlOffsets);
 
-    // Extraer valores
-    std::unordered_map<std::string, std::string> result;
-    extractOffsets(clientDllContent, clientDllOffsets, result);
-    extractOffsets(offsetsContent, offsetsCs, result);
+    // Verificar si la descarga fue exitosa
+    bool descargaExitosa = !clientDllContent.empty() && !offsetsContent.empty() &&
+        clientDllContent.find("429") == std::string::npos &&
+        offsetsContent.find("429") == std::string::npos;
 
-    // Convertir a JSON
-    json j;
-    for (const auto& [key, val] : result) {
-        j[key] = val;
+    std::unordered_map<std::string, std::string> result;
+
+    if (descargaExitosa) {
+        // Extraer valores normalmente
+        extractOffsets(clientDllContent, clientDllOffsets, result);
+        extractOffsets(offsetsContent, offsetsCs, result);
+
+        // Convertir a JSON y guardar
+        json j;
+        for (const auto& [key, val] : result) {
+            j[key] = val;
+        }
+
+        std::ofstream outFile("offsets.json");
+        outFile << j.dump(4); // pretty print
+        outFile.close();
+
+        std::cout << "Offsets actualizados automáticamente desde el servidor." << std::endl;
+    }
+    else {
+        std::cerr << "Error: No se pudieron descargar los offsets desde el servidor." << std::endl;
     }
 
-    // Guardar en offsets.json
-    std::ofstream outFile("offsets.json");
-    outFile << j.dump(4); // pretty print
-    outFile.close();
-
-    std::cout << "[+] Offsets guardados en offsets.json\n";
+    // Cargar offsets en el sistema
     offset::loadFromJson(result);
 }
 

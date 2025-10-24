@@ -72,10 +72,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\joebs\Desktop\external cs2 esp\external\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>
+    </IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\joebs\Desktop\external cs2 esp\external\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>
+    </IncludePath>
     <OutDir>..\Build</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -189,8 +191,6 @@
     <ClCompile Include="external\lua-5.4.7\src\lutf8lib.c" />
     <ClCompile Include="external\lua-5.4.7\src\lvm.c" />
     <ClCompile Include="external\lua-5.4.7\src\lzio.c" />
-    <ClCompile Include="src\cs\color.cpp" />
-    <ClCompile Include="src\cs\entity.cpp" />
     <ClCompile Include="src\legit\aimbot\TriggerBot\TriggerBot.cpp" />
     <ClCompile Include="src\legit\misc\AutoAccept\AutoAccept.cpp" />
     <ClCompile Include="src\legit\misc\FakeAngles\FakeAngles.cpp" />
@@ -244,8 +244,6 @@
     <ClInclude Include="src\cheats\misc\BunnyHop\Bunny.h" />
     <ClInclude Include="src\cheats\misc\MediaPlayer\MediaPlayer.h" />
     <ClInclude Include="src\cs\bone.hpp" />
-    <ClInclude Include="src\cs\color.hpp" />
-    <ClInclude Include="src\cs\entity.hpp" />
     <ClInclude Include="src\cs\handle_hijack.h" />
     <ClInclude Include="src\cs\memory.h" />
     <ClInclude Include="src\cs\offsets.h" />
