@@ -14,7 +14,7 @@ This project uses C++ with OpenCV 4.12.0 and Curl
 
 ## Requirements
 - Visual Studio 2019/2022
-- vcpkg with OpenCV:
+- vcpkg with OpenCV and Curl
 
 
 ## How to compile
