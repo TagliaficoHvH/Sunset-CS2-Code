@@ -10,7 +10,7 @@ If you just want to use it, you can download the loader I made: https://github.c
 By the way, don't leave the loader code anywhere, if you modify something in the code and compile it, it will leave an exe in the build folder, if you open it you will have the program.
 
 
-This project uses C++ with OpenCV 4.12.0.
+This project uses C++ with OpenCV 4.12.0 and Curl
 
 ## Requirements
 - Visual Studio 2019/2022
